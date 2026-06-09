@@ -26,7 +26,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   isar_generator: ^2.5.0
-  build_runner: ^2.4.8
+  build_runner: ^2.2.0
   flutter_lints: ^3.0.1
 
 flutter:
