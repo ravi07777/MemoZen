@@ -1,33 +1,28 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:collection/collection.dart';
-import '../core/services/isar_service.dart';
+import '../core/services/storage_service.dart';
 import '../models/topic.dart';
 import '../models/revision_event.dart';
 import '../core/utils/helpers.dart';
 
-final isarServiceProvider = Provider<IsarService>((ref) {
-  return IsarService();
-});
-
 final topicRepositoryProvider = Provider<TopicRepository>((ref) {
-  final isarService = ref.watch(isarServiceProvider);
-  return TopicRepository(isarService);
+  return TopicRepository(ref.watch(storageServiceProvider));
 });
 
 class TopicRepository {
-  final IsarService _isar;
+  final StorageService _storage;
 
-  TopicRepository(this._isar);
+  TopicRepository(this._storage);
 
-  Future<List<Topic>> getAllTopics() => _isar.getTopics();
+  Future<List<Topic>> getAllTopics() => _storage.getTopics();
 
   Future<List<Topic>> getTopicsBySubject(String subject) =>
-      _isar.getTopicsBySubject(subject);
+      _storage.getTopicsBySubject(subject);
 
   Future<List<String>> getSubjectGroups() async {
-    final topics = await _isar.getTopics();
+    final topics = await _storage.getTopics();
     final subjects = topics.map((t) => t.subjectGroup ?? 'Uncategorized').toSet();
-    final groups = await _isar.getSubjectGroups();
+    final groups = await _storage.getSubjectGroups();
     for (final g in groups) {
       subjects.add(g.name);
     }
@@ -35,40 +30,41 @@ class TopicRepository {
   }
 
   Future<void> addTopic(Topic topic) async {
-    await _isar.saveTopic(topic);
-    await _isar.generateRevisionEvents(topic);
+    await _storage.saveTopic(topic);
+    final saved = await _storage.getTopics();
+    final savedTopic = saved.last;
+    await _storage.generateRevisionEvents(savedTopic);
   }
 
   Future<void> updateTopic(Topic topic) async {
-    await _isar.saveTopic(topic);
-    await _isar.generateRevisionEvents(topic);
+    await _storage.saveTopic(topic);
+    await _storage.generateRevisionEvents(topic);
   }
 
   Future<void> deleteTopic(int id) async {
-    await _isar.deleteTopic(id);
+    await _storage.deleteTopic(id);
   }
 
-  Future<List<RevisionEvent>> getTodayEvents() => _isar.getTodayEvents();
-  Future<List<RevisionEvent>> getUpcomingEvents() => _isar.getUpcomingEvents();
-  Future<List<RevisionEvent>> getMissedEvents() => _isar.getMissedEvents();
-
-  Future<List<RevisionEvent>> getAllEvents() => _isar.getRevisionEvents();
+  Future<List<RevisionEvent>> getTodayEvents() => _storage.getTodayEvents();
+  Future<List<RevisionEvent>> getUpcomingEvents() => _storage.getUpcomingEvents();
+  Future<List<RevisionEvent>> getMissedEvents() => _storage.getMissedEvents();
+  Future<List<RevisionEvent>> getAllEvents() => _storage.getRevisionEvents();
 
   Future<void> markCompleted(int eventId) =>
-      _isar.markRevisionCompleted(eventId);
+      _storage.markRevisionCompleted(eventId);
 
   Future<void> markMissed(int eventId) =>
-      _isar.markRevisionMissed(eventId);
+      _storage.markRevisionMissed(eventId);
 
   Future<int> getTodayDueCount() async {
-    final events = await _isar.getTodayEvents();
+    final events = await _storage.getTodayEvents();
     return events.length;
   }
 
   Future<int> getCompletedThisWeek() async {
     final weekStart = startOfWeek(DateTime.now());
     final weekEnd = endOfWeek(DateTime.now());
-    final events = await _isar.getRevisionEvents();
+    final events = await _storage.getRevisionEvents();
     return events
         .where((e) =>
             e.status == RevisionStatus.completed &&
@@ -79,12 +75,12 @@ class TopicRepository {
   }
 
   Future<int> getStreak() async {
-    final profile = await _isar.getProfile();
+    final profile = await _storage.getProfile();
     return profile?.studyStreak ?? 0;
   }
 
   Future<void> updateTopicProgress(int topicId) async {
-    final events = await _isar.getRevisionEvents();
+    final events = await _storage.getRevisionEvents();
     final topicEvents = events.where((e) => e.topicId == topicId).toList();
     if (topicEvents.isEmpty) return;
 
@@ -92,17 +88,20 @@ class TopicRepository {
     final total = topicEvents.length;
     final progress = completed / total;
 
-    final topics = await _isar.getTopics();
-    final topic = topics.firstWhereOrNull((t) => t.id == topicId);
-    if (topic != null) {
-      topic.progress = progress;
-      topic.revisionCount = completed;
-      topic.lastRevisedAt = DateTime.now();
+    final topics = await _storage.getTopics();
+    final index = topics.indexWhere((t) => t.id == topicId);
+    if (index >= 0) {
+      final topic = topics[index];
       final nextEvent = topicEvents.firstWhereOrNull(
         (e) => e.status == RevisionStatus.upcoming,
       );
-      topic.nextRevisionAt = nextEvent?.dueDate;
-      await _isar.saveTopic(topic);
+      final updated = topic.copyWith(
+        progress: progress,
+        revisionCount: completed,
+        lastRevisedAt: DateTime.now(),
+        nextRevisionAt: nextEvent?.dueDate,
+      );
+      await _storage.saveTopic(updated);
     }
   }
 }

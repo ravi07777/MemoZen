@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'core/theme/theme_provider.dart';
-import 'core/services/isar_service.dart';
+import 'core/services/storage_service.dart';
 import 'core/services/notification_service.dart';
 import 'core/constants/app_constants.dart';
 import 'features/auth/welcome_screen.dart';
@@ -63,8 +63,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final isarService = IsarService();
-  await isarService.init();
+  final storageService = StorageService();
+  await storageService.init();
 
   final notificationService = NotificationService();
   await notificationService.init();
@@ -72,7 +72,7 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [
-        isarServiceProvider.overrideWithValue(isarService),
+        storageServiceProvider.overrideWithValue(storageService),
         notificationServiceProvider.overrideWithValue(notificationService),
       ],
       child: const MemoZenApp(),

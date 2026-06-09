@@ -3,6 +3,7 @@ import 'package:memozen/models/topic.dart';
 import 'package:memozen/models/revision_event.dart';
 import 'package:memozen/models/study_log.dart';
 import 'package:memozen/models/subject_group.dart';
+import 'package:memozen/core/utils/helpers.dart';
 
 void main() {
   group('Topic Model', () {
@@ -33,6 +34,19 @@ void main() {
       final topic = Topic(title: 'Test', progress: 1.0);
       expect(topic.isComplete, true);
     });
+
+    test('should serialize and deserialize to/from JSON', () {
+      final topic = Topic(
+        title: 'Test Topic',
+        subjectGroup: 'Science',
+        tags: ['physics', 'chemistry'],
+      );
+      final json = topic.toJson();
+      final restored = Topic.fromJson(json);
+      expect(restored.title, topic.title);
+      expect(restored.subjectGroup, topic.subjectGroup);
+      expect(restored.tags, topic.tags);
+    });
   });
 
   group('RevisionEvent Model', () {
@@ -45,6 +59,19 @@ void main() {
       );
       expect(event.status, RevisionStatus.upcoming);
       expect(event.cycleDay, 7);
+    });
+
+    test('should serialize and deserialize to/from JSON', () {
+      final event = RevisionEvent(
+        topicId: 1,
+        topicTitle: 'Test',
+        dueDate: DateTime(2025, 1, 15),
+        cycleDay: 30,
+      );
+      final json = event.toJson();
+      final restored = RevisionEvent.fromJson(json);
+      expect(restored.topicId, event.topicId);
+      expect(restored.cycleDay, event.cycleDay);
     });
   });
 
@@ -59,6 +86,20 @@ void main() {
       );
       expect(log.durationMinutes, 60);
     });
+
+    test('should serialize and deserialize to/from JSON', () {
+      final now = DateTime.now();
+      final log = StudyLog(
+        topicTitle: 'Test',
+        startTime: now,
+        endTime: now.add(const Duration(hours: 1)),
+        durationMinutes: 60,
+      );
+      final json = log.toJson();
+      final restored = StudyLog.fromJson(json);
+      expect(restored.durationMinutes, log.durationMinutes);
+      expect(restored.topicTitle, log.topicTitle);
+    });
   });
 
   group('SubjectGroup Model', () {
@@ -71,7 +112,15 @@ void main() {
 
   group('Utility Helpers', () {
     test('formatDuration returns correct strings', () {
-      // Import and test if needed
+      expect(formatDuration(15), '15 min');
+      expect(formatDuration(60), '1h');
+      expect(formatDuration(90), '1h 30m');
+      expect(formatDuration(0), '0 min');
+    });
+
+    test('greeting returns correct time-based greeting', () {
+      final greet = greeting();
+      expect(greet.contains('Good'), true);
     });
   });
 }
