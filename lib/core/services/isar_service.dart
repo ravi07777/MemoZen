@@ -1,5 +1,5 @@
+import 'dart:io';
 import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 import '../../models/user_profile.dart';
 import '../../models/topic.dart';
 import '../../models/revision_event.dart';
@@ -11,7 +11,10 @@ class IsarService {
   late Isar isar;
 
   Future<void> init() async {
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = Directory('${Platform.environment['HOME'] ?? '/tmp'}/.memozen');
+    if (!await dir.exists()) {
+      await dir.create(recursive: true);
+    }
     isar = await Isar.open(
       [
         UserProfileSchema,
