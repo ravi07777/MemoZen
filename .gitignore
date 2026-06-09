@@ -1,0 +1,39 @@
+# Flutter
+*.iml
+.idea/
+.dart_tool/
+.packages
+.pub/
+build/
+flutter_*.png
+linked_*.ds
+unlinked.ds
+unlinked_spec.ds
+
+# Android
+*.apk
+*.aab
+*.jks
+*.keystore
+local.properties
+android/.gradle/
+android/app/.cxx/
+android/captures/
+android/Thumbs.db
+
+# iOS
+ios/Flutter/AppFrameInfo.plist
+ios/Runner/GeneratedPluginRegistrant.h
+ios/Runner/GeneratedPluginRegistrant.m
+ios/Flutter/flutter_export_environment.sh
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+
+# Misc
+.DS_Store
+*.swp
+*.swo
+*.log
+*.bak
