@@ -113,7 +113,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildSummaryCards(ThemeData theme, AppColorTheme appTheme) {
     return ref.watch(homeDataProvider).when(
           data: (data) {
-            final (today, missed, upcoming, dueCount, weekCompleted, streak) = data;
+            final (_, _, upcoming, dueCount, weekCompleted, streak) = data;
             return GridView(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),

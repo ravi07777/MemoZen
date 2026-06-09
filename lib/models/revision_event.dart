@@ -61,7 +61,7 @@ class RevisionEvent {
         subjectGroup: json['subjectGroup'] as String?,
         dueDate: DateTime.parse(json['dueDate'] as String),
         completedAt: json['completedAt'] != null ? DateTime.parse(json['completedAt'] as String) : null,
-        status: RevisionStatus.values.firstWhere((s) => s.name == json['status'] as String? ?? 'upcoming'),
+        status: RevisionStatus.values.firstWhere((s) => s.name == (json['status'] as String? ?? 'upcoming')),
         cycleDay: json['cycleDay'] as int? ?? 1,
       );
 }

@@ -314,20 +314,22 @@ class _AddTopicScreenState extends ConsumerState<AddTopicScreen> {
     );
 
     if (_isEditing) {
-      topic
-        ..title = _titleCtrl.text.trim()
-        ..subjectGroup = _subjectGroup
-        ..studiedOn = _studiedOn
-        ..notes = _notesCtrl.text.trim()
-        ..tags = tags
-        ..useCustomCycle = _useCustomCycle
-        ..customCycleDays = List.from(_customCycleDays);
-      await repo.updateTopic(topic);
+      final updated = topic.copyWith(
+        title: _titleCtrl.text.trim(),
+        subjectGroup: _subjectGroup,
+        studiedOn: _studiedOn,
+        notes: _notesCtrl.text.trim(),
+        tags: tags,
+        useCustomCycle: _useCustomCycle,
+        customCycleDays: List.from(_customCycleDays),
+      );
+      await repo.updateTopic(updated);
     } else {
-      topic
-        ..useCustomCycle = _useCustomCycle
-        ..customCycleDays = List.from(_customCycleDays);
-      await repo.addTopic(topic);
+      final newTopic = topic.copyWith(
+        useCustomCycle: _useCustomCycle,
+        customCycleDays: List.from(_customCycleDays),
+      );
+      await repo.addTopic(newTopic);
     }
 
     if (mounted) context.pop();

@@ -59,7 +59,7 @@ class AppColorTheme {
           color: colorScheme.onSurface,
         ),
       ),
-      cardTheme: CardThemeData(
+      cardTheme: CardTheme(
         color: cardColor,
         elevation: 2,
         shadowColor: primary.withOpacity(0.1),

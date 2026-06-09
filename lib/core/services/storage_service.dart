@@ -200,7 +200,7 @@ class StorageService {
 
   Future<void> saveSubjectGroup(SubjectGroup group) async {
     final groups = await getSubjectGroups();
-    groups.add(group.copyWith(id: _nextId(groups, (g) => g.id)));
+    groups.add(SubjectGroup(id: _nextId(groups, (g) => g.id), name: group.name, iconName: group.iconName, createdAt: group.createdAt, isExpanded: group.isExpanded));
     await _writeJson('subjectGroups', groups.map((g) => g.toJson()).toList());
   }
 

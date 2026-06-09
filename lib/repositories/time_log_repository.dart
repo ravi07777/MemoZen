@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../core/services/storage_service.dart';
 import '../core/utils/helpers.dart';
 import '../models/study_log.dart';
@@ -20,21 +21,27 @@ class TimeLogRepository {
 
   Future<int> getTodayTotal() async {
     final logs = await _storage.getStudyLogsForDate(DateTime.now());
-    return logs.fold(0, (sum, l) => sum + l.durationMinutes);
+    int total = 0;
+    for (final l in logs) { total += l.durationMinutes; }
+    return total;
   }
 
   Future<int> getWeekTotal() async {
     final start = startOfWeek(DateTime.now());
     final end = endOfWeek(DateTime.now());
     final logs = await _storage.getStudyLogsForRange(start, end);
-    return logs.fold(0, (sum, l) => sum + l.durationMinutes);
+    int total = 0;
+    for (final l in logs) { total += l.durationMinutes; }
+    return total;
   }
 
   Future<int> getMonthTotal() async {
     final start = startOfMonth(DateTime.now());
     final end = endOfMonth(DateTime.now());
     final logs = await _storage.getStudyLogsForRange(start, end);
-    return logs.fold(0, (sum, l) => sum + l.durationMinutes);
+    int total = 0;
+    for (final l in logs) { total += l.durationMinutes; }
+    return total;
   }
 
   Future<Map<String, int>> getWeekData() async {
@@ -85,6 +92,8 @@ class TimeLogRepository {
 
   Future<int> getLifetimeTotal() async {
     final logs = await _storage.getStudyLogs();
-    return logs.fold(0, (sum, l) => sum + l.durationMinutes);
+    int total = 0;
+    for (final l in logs) { total += l.durationMinutes; }
+    return total;
   }
 }
