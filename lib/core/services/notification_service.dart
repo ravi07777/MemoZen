@@ -24,14 +24,13 @@ class NotificationService {
     required String body,
     String? payload,
   }) async {
-    const androidDetails = AndroidNotificationDetails(
-      'revision_channel',
-      'Revision Reminders',
-      channelDescription: 'Reminders for upcoming topic revisions',
-      importance: Importance.high,
-      priority: Priority.high,
-      icon: '@mipmap/ic_launcher',
-    );
+      const androidDetails = AndroidNotificationDetails(
+        'revision_channel',
+        'Revision Reminders',
+        channelDescription: 'Reminders for upcoming topic revisions',
+        importance: Importance.high,
+        priority: Priority.high,
+      );
     const details = NotificationDetails(android: androidDetails);
     await _plugin.show(id, title, body, details, payload: payload);
   }
