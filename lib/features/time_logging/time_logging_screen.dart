@@ -33,23 +33,20 @@ class _TimeLoggingScreenState extends ConsumerState<TimeLoggingScreen> {
     final theme = Theme.of(context);
     final appTheme = ref.watch(appThemeProvider);
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Time Logging', style: theme.textTheme.headlineMedium),
-              const SizedBox(height: 20),
-              _buildQuickLogButtons(theme, appTheme),
-              const SizedBox(height: 20),
-              _buildSummaryCards(theme, appTheme),
-              const SizedBox(height: 20),
-              _buildRecentLogs(theme, appTheme),
-            ],
-          ),
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Time Logging', style: theme.textTheme.headlineMedium),
+            const SizedBox(height: 20),
+            _buildQuickLogButtons(theme, appTheme),
+            const SizedBox(height: 20),
+            _buildSummaryCards(theme, appTheme),
+            const SizedBox(height: 20),
+            _buildRecentLogs(theme, appTheme),
+          ],
         ),
       ),
     );

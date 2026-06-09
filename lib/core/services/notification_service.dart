@@ -66,7 +66,3 @@ class NotificationService {
     await _plugin.cancelAll();
   }
 }
-
-final notificationProvider = Provider<NotificationService>((ref) {
-  return NotificationService();
-});

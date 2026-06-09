@@ -13,113 +13,110 @@ class SettingsScreen extends ConsumerWidget {
     final themeIndex = ref.watch(selectedThemeProvider);
     final themeMode = ref.watch(themeModeProvider);
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              // Profile section
-              Center(
-                child: Column(
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          colors: [
-                            theme.colorScheme.primary,
-                            theme.colorScheme.secondary,
-                          ],
-                        ),
-                      ),
-                      child: const Center(
-                        child: Icon(Icons.person, size: 40, color: Colors.white),
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            // Profile section
+            Center(
+              child: Column(
+                children: [
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [
+                          theme.colorScheme.primary,
+                          theme.colorScheme.secondary,
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Learner',
-                      style: theme.textTheme.titleLarge,
+                    child: const Center(
+                      child: Icon(Icons.person, size: 40, color: Colors.white),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'learner@memozen.app',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey.shade500,
-                      ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Learner',
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'learner@memozen.app',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey.shade500,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 32),
+            ),
+            const SizedBox(height: 32),
 
-              // Menu items
-              _buildMenuItem(
-                theme,
-                icon: Icons.notifications_outlined,
-                title: 'Notification Reminder',
-                onTap: () {},
+            // Menu items
+            _buildMenuItem(
+              theme,
+              icon: Icons.notifications_outlined,
+              title: 'Notification Reminder',
+              onTap: () {},
+            ),
+            _buildMenuItem(
+              theme,
+              icon: Icons.language_outlined,
+              title: 'Language',
+              onTap: () {},
+              trailing: const Text('English'),
+            ),
+            _buildMenuItem(
+              theme,
+              icon: Icons.palette_outlined,
+              title: 'Theme',
+              onTap: () => _showThemeSheet(context, ref, themeIndex, themeMode),
+              trailing: Text(
+                allThemes[themeIndex].name,
+                style: TextStyle(color: allThemes[themeIndex].primary),
               ),
-              _buildMenuItem(
-                theme,
-                icon: Icons.language_outlined,
-                title: 'Language',
-                onTap: () {},
-                trailing: const Text('English'),
-              ),
-              _buildMenuItem(
-                theme,
-                icon: Icons.palette_outlined,
-                title: 'Theme',
-                onTap: () => _showThemeSheet(context, ref, themeIndex, themeMode),
-                trailing: Text(
-                  allThemes[themeIndex].name,
-                  style: TextStyle(color: allThemes[themeIndex].primary),
-                ),
-              ),
-              const Divider(height: 32),
-              _buildMenuItem(
-                theme,
-                icon: Icons.privacy_tip_outlined,
-                title: 'Privacy Policy',
-                onTap: () {},
-              ),
-              _buildMenuItem(
-                theme,
-                icon: Icons.info_outline,
-                title: 'About',
-                onTap: () {},
-                trailing: Text(AppConstants.appVersion),
-              ),
-              const Divider(height: 32),
-              _buildMenuItem(
-                theme,
-                icon: Icons.download_outlined,
-                title: 'Export Backup',
-                onTap: () {},
-              ),
-              _buildMenuItem(
-                theme,
-                icon: Icons.upload_outlined,
-                title: 'Import Backup',
-                onTap: () {},
-              ),
-              const Divider(height: 32),
-              _buildMenuItem(
-                theme,
-                icon: Icons.logout,
-                title: 'Logout',
-                onTap: () {},
-                textColor: Colors.red,
-              ),
-            ],
-          ),
+            ),
+            const Divider(height: 32),
+            _buildMenuItem(
+              theme,
+              icon: Icons.privacy_tip_outlined,
+              title: 'Privacy Policy',
+              onTap: () {},
+            ),
+            _buildMenuItem(
+              theme,
+              icon: Icons.info_outline,
+              title: 'About',
+              onTap: () {},
+              trailing: Text(AppConstants.appVersion),
+            ),
+            const Divider(height: 32),
+            _buildMenuItem(
+              theme,
+              icon: Icons.download_outlined,
+              title: 'Export Backup',
+              onTap: () {},
+            ),
+            _buildMenuItem(
+              theme,
+              icon: Icons.upload_outlined,
+              title: 'Import Backup',
+              onTap: () {},
+            ),
+            const Divider(height: 32),
+            _buildMenuItem(
+              theme,
+              icon: Icons.logout,
+              title: 'Logout',
+              onTap: () {},
+              textColor: Colors.red,
+            ),
+          ],
         ),
       ),
     );

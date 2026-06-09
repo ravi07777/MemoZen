@@ -34,88 +34,85 @@ class _TopicsScreenState extends ConsumerState<TopicsScreen> {
     final theme = Theme.of(context);
     final appTheme = ref.watch(appThemeProvider);
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Topics',
-                    style: theme.textTheme.headlineMedium,
-                  ),
-                  ref.watch(topicsListProvider).when(
-                    data: (topics) => Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: appTheme.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        '${topics.length} topics',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: appTheme.primary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Topics',
+                  style: theme.textTheme.headlineMedium,
+                ),
+                ref.watch(topicsListProvider).when(
+                  data: (topics) => Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: appTheme.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    loading: () => const SizedBox.shrink(),
-                    error: (_, __) => const SizedBox.shrink(),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      onChanged: (v) => setState(() => _searchQuery = v.toLowerCase()),
-                      decoration: InputDecoration(
-                        hintText: 'Search topics...',
-                        prefixIcon: const Icon(Icons.search, size: 20),
-                        isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Text(
+                      '${topics.length} topics',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: appTheme.primary,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  _iconButton(Icons.grid_view, _isGridView, () => setState(() => _isGridView = true)),
-                  const SizedBox(width: 4),
-                  _iconButton(Icons.list, !_isGridView, () => setState(() => _isGridView = false)),
-                  const SizedBox(width: 4),
-                  PopupMenuButton<String>(
-                    onSelected: (v) => setState(() => _sortBy = v),
-                    itemBuilder: (_) => [
-                      const PopupMenuItem(value: 'All', child: Text('All topics')),
-                      const PopupMenuItem(value: 'Recent', child: Text('Most recent')),
-                      const PopupMenuItem(value: 'Progress', child: Text('By progress')),
-                    ],
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: theme.cardTheme.color,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(Icons.sort, size: 20, color: Colors.grey.shade600),
+                  loading: () => const SizedBox.shrink(),
+                  error: (_, __) => const SizedBox.shrink(),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    onChanged: (v) => setState(() => _searchQuery = v.toLowerCase()),
+                    decoration: InputDecoration(
+                      hintText: 'Search topics...',
+                      prefixIcon: const Icon(Icons.search, size: 20),
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 8),
+                _iconButton(Icons.grid_view, _isGridView, () => setState(() => _isGridView = true)),
+                const SizedBox(width: 4),
+                _iconButton(Icons.list, !_isGridView, () => setState(() => _isGridView = false)),
+                const SizedBox(width: 4),
+                PopupMenuButton<String>(
+                  onSelected: (v) => setState(() => _sortBy = v),
+                  itemBuilder: (_) => [
+                    const PopupMenuItem(value: 'All', child: Text('All topics')),
+                    const PopupMenuItem(value: 'Recent', child: Text('Most recent')),
+                    const PopupMenuItem(value: 'Progress', child: Text('By progress')),
+                  ],
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: theme.cardTheme.color,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(Icons.sort, size: 20, color: Colors.grey.shade600),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: _buildTopicsList(theme, appTheme),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: _buildTopicsList(theme, appTheme),
+          ),
+        ],
       ),
     );
   }

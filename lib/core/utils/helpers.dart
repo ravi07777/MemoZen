@@ -1,4 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+Color cardColor(BuildContext context) {
+  final cardTheme = Theme.of(context).cardTheme;
+  return cardTheme.color ?? Theme.of(context).colorScheme.surface;
+}
 
 String formatDate(DateTime date) {
   return DateFormat('MMM dd, yyyy').format(date);

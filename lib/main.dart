@@ -64,10 +64,18 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final storageService = StorageService();
-  await storageService.init();
+  try {
+    await storageService.init();
+  } catch (_) {
+    // Storage init failed - app will work in memory-only mode
+  }
 
   final notificationService = NotificationService();
-  await notificationService.init();
+  try {
+    await notificationService.init();
+  } catch (_) {
+    // Notification init failed - app works without notifications
+  }
 
   runApp(
     ProviderScope(

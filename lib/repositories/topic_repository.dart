@@ -31,9 +31,7 @@ class TopicRepository {
 
   Future<void> addTopic(Topic topic) async {
     await _storage.saveTopic(topic);
-    final saved = await _storage.getTopics();
-    final savedTopic = saved.last;
-    await _storage.generateRevisionEvents(savedTopic);
+    await _storage.generateRevisionEvents(topic);
   }
 
   Future<void> updateTopic(Topic topic) async {

@@ -34,23 +34,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final theme = Theme.of(context);
     final appTheme = ref.watch(appThemeProvider);
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(theme, appTheme),
-              const SizedBox(height: 20),
-              _buildSummaryCards(theme, appTheme),
-              const SizedBox(height: 20),
-              _buildSegmentedTabs(theme),
-              const SizedBox(height: 16),
-              _buildContent(theme, appTheme),
-            ],
-          ),
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(theme, appTheme),
+            const SizedBox(height: 20),
+            _buildSummaryCards(theme, appTheme),
+            const SizedBox(height: 20),
+            _buildSegmentedTabs(theme),
+            const SizedBox(height: 16),
+            _buildContent(theme, appTheme),
+          ],
         ),
       ),
     );

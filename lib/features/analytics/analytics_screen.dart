@@ -5,6 +5,8 @@ import 'package:fl_chart/fl_chart.dart';
 import '../../core/theme/theme_provider.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/helpers.dart';
+import '../../models/topic.dart';
+import '../../models/revision_event.dart';
 import '../../repositories/time_log_repository.dart';
 import '../../repositories/topic_repository.dart';
 
@@ -31,36 +33,33 @@ class AnalyticsScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final appTheme = ref.watch(appThemeProvider);
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Analytics', style: theme.textTheme.headlineMedium),
-              const SizedBox(height: 20),
-              ref.watch(analyticsProvider).when(
-                data: (data) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildLifetimeCard(theme, appTheme, data.lifetime),
-                    const SizedBox(height: 16),
-                    _buildDailyChart(theme, appTheme, data.dailyData),
-                    const SizedBox(height: 16),
-                    _buildSubjectChart(theme, appTheme, data.subjectDist),
-                    const SizedBox(height: 16),
-                    _buildTopTopics(theme, data.topTopics),
-                    const SizedBox(height: 16),
-                    _buildCompletionStats(theme, appTheme, data.topics, data.events),
-                  ],
-                ),
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (_, __) => const SizedBox.shrink(),
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Analytics', style: theme.textTheme.headlineMedium),
+            const SizedBox(height: 20),
+            ref.watch(analyticsProvider).when(
+              data: (data) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildLifetimeCard(theme, appTheme, data.lifetime),
+                  const SizedBox(height: 16),
+                  _buildDailyChart(theme, appTheme, data.dailyData),
+                  const SizedBox(height: 16),
+                  _buildSubjectChart(theme, appTheme, data.subjectDist),
+                  const SizedBox(height: 16),
+                  _buildTopTopics(theme, data.topTopics),
+                  const SizedBox(height: 16),
+                  _buildCompletionStats(theme, appTheme, data.topics, data.events),
+                ],
               ),
-            ],
-          ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (_, __) => const SizedBox.shrink(),
+            ),
+          ],
         ),
       ),
     );
@@ -249,11 +248,11 @@ class AnalyticsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildCompletionStats(ThemeData theme, AppColorTheme appTheme, List<dynamic> topics, List<dynamic> events) {
+  Widget _buildCompletionStats(ThemeData theme, AppColorTheme appTheme, List<Topic> topics, List<RevisionEvent> events) {
     final totalTopics = topics.length;
-    final completedTopics = topics.where((t) => (t as dynamic).isComplete == true).length;
+    final completedTopics = topics.where((t) => t.isComplete).length;
     final totalEvents = events.length;
-    final completedEvents = events.where((e) => (e as dynamic).status.name == 'completed').length;
+    final completedEvents = events.where((e) => e.status == RevisionStatus.completed).length;
 
     return Container(
       padding: const EdgeInsets.all(16),

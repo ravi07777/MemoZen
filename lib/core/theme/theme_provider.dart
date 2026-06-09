@@ -17,12 +17,11 @@ final appThemeProvider = Provider<AppColorTheme>((ref) {
 });
 
 final themeDataProvider = Provider<ThemeData>((ref) {
-  final theme = ref.watch(appThemeProvider);
+  final themeIndex = ref.watch(selectedThemeProvider);
   final mode = ref.watch(themeModeProvider);
-  if (mode == ThemeMode.dark) {
-    return darkTheme.toThemeData();
-  }
-  return theme.toThemeData();
+  final isDark = mode == ThemeMode.dark;
+  final selected = allThemes[isDark ? allThemes.length - 1 : themeIndex];
+  return selected.toThemeData();
 });
 
 class ThemeModeNotifier extends StateNotifier<ThemeMode> {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../models/user_profile.dart';
 import '../../models/topic.dart';
 import '../../models/revision_event.dart';
@@ -15,7 +16,8 @@ class StorageService {
   late String _baseDir;
 
   Future<void> init() async {
-    _baseDir = '${Platform.environment['HOME'] ?? '/tmp'}/.memozen/data';
+    final appDir = await getApplicationDocumentsDirectory();
+    _baseDir = '${appDir.path}/.memozen/data';
     final dir = Directory(_baseDir);
     if (!await dir.exists()) {
       await dir.create(recursive: true);

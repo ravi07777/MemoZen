@@ -35,28 +35,25 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     final theme = Theme.of(context);
     final appTheme = ref.watch(appThemeProvider);
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Text(
-                'Calendar',
-                style: theme.textTheme.headlineMedium,
-              ),
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: Text(
+              'Calendar',
+              style: theme.textTheme.headlineMedium,
             ),
-            const SizedBox(height: 16),
-            _buildMonthHeader(theme, appTheme),
-            const SizedBox(height: 8),
-            _buildWeekdayHeader(theme),
-            _buildCalendarGrid(theme, appTheme),
-            const Divider(height: 32),
-            _buildSelectedDateEvents(theme, appTheme),
-          ],
-        ),
+          ),
+          const SizedBox(height: 16),
+          _buildMonthHeader(theme, appTheme),
+          const SizedBox(height: 8),
+          _buildWeekdayHeader(theme),
+          _buildCalendarGrid(theme, appTheme),
+          const Divider(height: 32),
+          _buildSelectedDateEvents(theme, appTheme),
+        ],
       ),
     );
   }
